@@ -1,0 +1,17 @@
+.drag-drop-box{
+    width: 70vw;
+    height: 77vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: dashed 2px grey;
+    flex-direction: column;
+}
+
+.drag-drop-box-container{
+    width: 82vw;
+    height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
