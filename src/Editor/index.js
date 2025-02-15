@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { Slider, Box, Button, Typography, Backdrop, MenuItem, Select, Drawer } from "@mui/material";
+import { Slider, Box, Button, Typography, Backdrop, MenuItem, Select } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 // import Drawer from "./drawer/";
 import ReplayIcon from '@mui/icons-material/Replay';

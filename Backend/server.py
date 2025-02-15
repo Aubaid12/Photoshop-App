@@ -16,9 +16,9 @@ def apply_filter():
    
     try: 
         base64_image = data["image"]
-        client = MongoClient("mongodb://localhost:27017")
-        db = client["Photoshop"]
-        collection = db["Logs"]
+        client = MongoClient("mongodb+srv://Aubaid:12345@cluster0.7a1d5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+        db = client["photoshop"]
+        collection = db["logs"]
         image_data = base64.b64decode(base64_image.split(",")[1])
         np_array = np.frombuffer(image_data,np.uint8)
         image = cv2.imdecode(np_array, cv2.IMREAD_COLOR)
@@ -27,12 +27,6 @@ def apply_filter():
         
         if data["filter"] == "grayscale":
             processed_image = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-        elif data["filter"] == "cartoon":
-            gray  =  cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            gray  =  cv2.medianBlur(gray, 5)
-            edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9)
-            color = cv2.bilateralFilter(image, 9, 300, 300)
-            processed_image = cv2.bitwise_and(color, color, mask=edges)
         elif data["filter"] == "sharpen":
             kernel = np.array([[0, -1, 0], [-1, 5,-1], [0, -1, 0]])
             processed_image = cv2.filter2D(image, -1, kernel)
@@ -61,6 +55,12 @@ def apply_filter():
             for i in range(3):  
                 processed_image[:, :, i] = processed_image[:, :, i] * mask
                 processed_image = np.uint8(np.clip(processed_image, 0, 255))
+        elif data["filter"] == "cartoon":
+            gray  =  cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            gray  =  cv2.medianBlur(gray, 5)
+            edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9)
+            color = cv2.bilateralFilter(image, 9, 300, 300)
+            processed_image = cv2.bitwise_and(color, color, mask=edges)       
         elif data["filter"] == "sketch":
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             inverted = cv2.bitwise_not(gray)
@@ -99,6 +99,6 @@ def apply_filter():
         collection.insert_one({"Status":"Error","Error_type":str(e) ,"ip_address":ip_addr ,"filters_used":data["filter"]})
         return jsonify({"message": "error while processing image"}), 500
             
-            
-app.run(debug=True)    
+if __name__ == "__main__":
+    app.run(debug=False)    
 
