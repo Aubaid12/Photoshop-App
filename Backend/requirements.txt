@@ -4,4 +4,3 @@ gunicorn
 pymongo
 opencv-python
 numpy
-base64
